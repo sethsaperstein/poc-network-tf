@@ -35,19 +35,19 @@ resource "aws_vpc" "main" {
 }
 
 module "subnets_1" {
-    source = "./modules/az_subnets"
+  source = "./modules/az_subnets"
 
-    vpc_id = aws_vpc.main.id
-    az = var.az_1
-    pub_sub_cidr_block = var.pub_sub_cidr_block_1
-    prv_sub_cidr_block = var.prv_sub_cidr_block_1
+  vpc_id             = aws_vpc.main.id
+  az                 = var.az_1
+  pub_sub_cidr_block = var.pub_sub_cidr_block_1
+  prv_sub_cidr_block = var.prv_sub_cidr_block_1
 }
 
 module "subnets_2" {
-    source = "./modules/az_subnets"
+  source = "./modules/az_subnets"
 
-    vpc_id = aws_vpc.main.id
-    az = var.az_2
-    pub_sub_cidr_block = var.pub_sub_cidr_block_2
-    prv_sub_cidr_block = var.prv_sub_cidr_block_2
+  vpc_id             = aws_vpc.main.id
+  az                 = var.az_2
+  pub_sub_cidr_block = var.pub_sub_cidr_block_2
+  prv_sub_cidr_block = var.prv_sub_cidr_block_2
 }

@@ -42,7 +42,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_eip" "eip_natgw" {} 
+resource "aws_eip" "eip_natgw" {}
 
 resource "aws_nat_gateway" "natgateway" {
   allocation_id = aws_eip.eip_natgw.id
