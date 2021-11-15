@@ -13,3 +13,7 @@ variable pub_sub_cidr_block {
 variable prv_sub_cidr_block {
   type = string
 }
+
+variable internet_gw_id {
+  type = string
+}

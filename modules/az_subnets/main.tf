@@ -23,7 +23,7 @@ resource "aws_route_table" "pub_sub_rt" {
   vpc_id = var.vpc_id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
+    gateway_id = var.internet_gw_id
   }
   tags = {
     Name = "public subnet route table"
@@ -33,13 +33,6 @@ resource "aws_route_table" "pub_sub_rt" {
 resource "aws_route_table_association" "internet_for_pub_sub" {
   route_table_id = aws_route_table.pub_sub_rt.id
   subnet_id      = aws_subnet.pub_sub.id
-}
-
-resource "aws_internet_gateway" "igw" {
-  vpc_id = var.vpc_id
-  tags = {
-    Name = "internet gateway"
-  }
 }
 
 resource "aws_eip" "eip_natgw" {}
