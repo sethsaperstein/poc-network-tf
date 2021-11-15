@@ -34,67 +34,20 @@ resource "aws_vpc" "main" {
   }
 }
 
-resource "aws_subnet" "pub_sub" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.pub_sub_cidr_block
-  availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = true
-  tags = {
-    Name = "Public Subnet"
-  }
+module "subnets_1" {
+    source = "./modules/az_subnets"
+
+    vpc_id = aws_vpc.main.id
+    az = var.az_1
+    pub_sub_cidr_block = var.pub_sub_cidr_block_1
+    prv_sub_cidr_block = var.prv_sub_cidr_block_1
 }
 
-resource "aws_subnet" "prv_sub" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.prv_sub_cidr_block
-  availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = false
-  tags = {
-    Name = "Private Subnet"
-  }
-}
+module "subnets_2" {
+    source = "./modules/az_subnets"
 
-resource "aws_route_table" "pub_sub_rt" {
-  vpc_id = aws_vpc.main.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
-  }
-  tags = {
-    Name = "public subnet route table"
-  }
-}
-
-resource "aws_route_table_association" "internet_for_pub_sub" {
-  route_table_id = aws_route_table.pub_sub_rt.id
-  subnet_id      = aws_subnet.pub_sub.id
-}
-
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
-  tags = {
-    Name = "internet gateway"
-  }
-}
-
-resource "aws_eip" "eip_natgw" {} 
-
-resource "aws_nat_gateway" "natgateway" {
-  allocation_id = aws_eip.eip_natgw.id
-  subnet_id     = aws_subnet.pub_sub.id
-}
-
-resource "aws_route_table" "prv_sub_rt" {
-  vpc_id = aws_vpc.main.id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.natgateway.id
-  }
-  tags = {
-    Name = "private subnet route table"
-  }
-}
-resource "aws_route_table_association" "prv_sub_to_natgw" {
-  route_table_id = aws_route_table.prv_sub_rt.id
-  subnet_id      = aws_subnet.prv_sub.id
+    vpc_id = aws_vpc.main.id
+    az = var.az_2
+    pub_sub_cidr_block = var.pub_sub_cidr_block_2
+    prv_sub_cidr_block = var.prv_sub_cidr_block_2
 }
